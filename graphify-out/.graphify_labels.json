@@ -1,0 +1,20 @@
+{
+  "0": "service.py",
+  "1": "db.py",
+  "2": "admin.py",
+  "3": "products.py",
+  "4": "render",
+  "5": "다이소형 생활용품 쇼핑몰 — 상세 기획서",
+  "6": "transaction",
+  "7": "MockPaymentGateway",
+  "9": "routers/cart.py",
+  "12": "다이소몰 (로컬 데모)",
+  "13": "test_admin.py",
+  "14": "test_signup.py",
+  "15": "test_delete_account.py",
+  "16": "test_orders.py",
+  "17": "test_app.py",
+  "18": "app/__init__.py",
+  "19": "services/__init__.py",
+  "20": "shoppingmall"
+}

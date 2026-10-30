@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.cart_page }}{% endblock %}
+{% block content %}
+<h1>{{ msg.cart_page }}</h1>
+
+{% if lines %}
+  <div class="table-wrap">
+  <table class="table cart-table">
+    <thead>
+      <tr><th>{{ msg.product }}</th><th>{{ msg.quantity }}</th><th class="right">{{ msg.amount }}</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for line in lines %}
+        <tr>
+          <td class="cell-product">
+            <span class="mini-thumb">{{ line.product.emoji }}</span>
+            <span>
+              <strong>{{ line.product.name }}</strong>
+              {% if not line.product.is_active %}<span class="tag soldout">{{ msg.soldout_label }}</span>{% endif %}
+            </span>
+          </td>
+          <td>
+            <form method="post" action="/cart/items/{{ line.id }}" class="qty-form">
+              <input type="number" name="quantity" value="{{ line.quantity }}" min="1" max="{{ line.product.stock or 1 }}">
+              <button type="submit" class="btn small">변경</button>
+            </form>
+          </td>
+          <td class="right">{{ line.subtotal|won }}</td>
+          <td class="right">
+            <form method="post" action="/cart/items/{{ line.id }}/delete">
+              <button type="submit" class="linkish danger">삭제</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  <div class="summary">
+    <span>{{ msg.total }}</span>
+    <strong>{{ total|won }}</strong>
+  </div>
+  <div class="actions">
+    <a href="/" class="btn">{{ msg.continue_shopping }}</a>
+    <a href="/checkout" class="btn primary">{{ msg.order_now }}</a>
+  </div>
+{% else %}
+  <p class="empty">{{ msg.cart_empty }}</p>
+  <a href="/" class="btn">{{ msg.shop_again }}</a>
+{% endif %}
+{% endblock %}

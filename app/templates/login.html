@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.login_page }}{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <h1>{{ msg.login_button }}</h1>
+
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+  <form method="post" action="/login" class="stack">
+    <input type="hidden" name="next" value="{{ next_path }}">
+    <label>{{ msg.email }}
+      <input type="email" name="email" value="{{ email or '' }}" required autocomplete="email">
+    </label>
+    <label>{{ msg.password }}
+      <input type="password" name="password" required autocomplete="current-password">
+    </label>
+    <button type="submit" class="btn primary block">{{ msg.login_button }}</button>
+  </form>
+
+  <p class="muted">{{ msg.no_account }}<a href="/signup">{{ msg.signup_link }}</a></p>
+</section>
+{% endblock %}

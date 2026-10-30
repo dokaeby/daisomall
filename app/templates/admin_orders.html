@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block title %}{{ msg.admin_orders_page }}{% endblock %}
+{% block content %}
+<h1>{{ msg.admin_orders_title }}</h1>
+<p class="muted"><a href="/admin/products">{{ msg.go_product_mgmt }}</a></p>
+
+{% if orders %}
+  <div class="table-wrap">
+  <table class="table">
+
+    <thead>
+      <tr><th>{{ msg.order_no }}</th><th>{{ '상태' if lang=='ko' else 'Status' }}</th><th class="right">{{ msg.amount }}</th><th>{{ msg.shipping_address }}</th><th>{{ msg.tracking_register }}</th></tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+        <tr>
+          <td>{{ order.order_no }}</td>
+          <td>{{ status_badge(order.status) }}</td>
+          <td class="right">{{ order.total_amount|won }}</td>
+          <td>{{ order.receiver_name }}<br><span class="muted">{{ order.address }}</span></td>
+          <td>
+            <form method="post" action="/admin/orders/{{ order.order_no }}/shipping" class="inline-form">
+              <input type="text" name="carrier" value="{{ order.carrier or '' }}" placeholder="{{ msg.carrier }}" size="8">
+              <input type="text" name="tracking_no" value="{{ order.tracking_no or '' }}" placeholder="{{ '운송장' if lang=='ko' else 'Tracking No' }}" size="12">
+              <button type="submit" class="btn small">{{ msg.register }}</button>
+            </form>
+            {% if order.status == 'SHIPPED' %}
+              <form method="post" action="/admin/orders/{{ order.order_no }}/delivered" class="inline-form">
+                <button type="submit" class="btn small">{{ msg.delivery_complete }}</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+{% else %}
+  <p class="empty">{{ msg.no_orders_yet }}</p>
+{% endif %}
+{% endblock %}

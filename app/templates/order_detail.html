@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.order_page_title_prefix }}{{ order.order_no }} · 다이so Mall{% endblock %}
+{% block content %}
+<a href="/orders" class="back">{{ msg.order_back }}</a>
+
+<section class="panel">
+  <div class="order-head">
+    <div>
+      <h1>{{ '주문번호' if lang=='ko' else 'Order' }} {{ order.order_no }}</h1>
+      <p class="muted">{{ order.created_at[:10] }} {{ '결제' if lang=='ko' else 'Payment' }} · {{ order.payment_method }}</p>
+    </div>
+    <p class="current-status">{{ msg.order_status_label }} {{ status_label }}</p>
+  </div>
+
+  <ol class="timeline">
+    {% for label, reached in timeline %}
+      <li class="{% if reached %}reached{% endif %}">
+        <span class="dot"></span>
+        <span class="label">{{ label }}</span>
+      </li>
+    {% endfor %}
+  </ol>
+
+  <div class="shipping">
+    <h2>{{ msg.shipping_info_title }}</h2>
+    <p>{{ order.receiver_name }} · {{ order.receiver_phone }}</p>
+    <p>{{ order.address }}</p>
+    {% if order.tracking_no %}
+      <p class="tracking">{{ '택배사' if lang=='ko' else 'Carrier' }} {{ order.carrier }} · {{ '운송장' if lang=='ko' else 'Tracking' }} {{ order.tracking_no }}</p>
+    {% else %}
+      <p class="muted">{{ msg.no_tracking }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="panel">
+  <h2>{{ msg.order_products }}</h2>
+  <div class="table-wrap">
+  <table class="table">
+
+    <thead>
+      <tr><th>{{ msg.product }}</th><th>{{ msg.unit_price }}</th><th>{{ msg.quantity }}</th><th class="right">{{ msg.amount }}</th></tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+        <tr>
+          <td>{{ item.product_name }}</td>
+          <td>{{ item.unit_price|won }}</td>
+          <td>{{ item.quantity }}</td>
+          <td class="right">{{ item.subtotal|won }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <div class="summary">
+    <span>{{ msg.final_amount }}</span>
+    <strong>{{ order.total_amount|won }}</strong>
+  </div>
+</section>
+{% endblock %}

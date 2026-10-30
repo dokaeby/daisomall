@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.orders_page }}{% endblock %}
+{% block content %}
+<h1>{{ msg.orders_page }}</h1>
+
+{% if orders %}
+  <div class="table-wrap">
+  <table class="table">
+
+    <thead>
+      <tr><th>{{ msg.order_no }}</th><th>{{ '주문일' if lang=='ko' else 'Order Date' }}</th><th>{{ status_labels.get('PAID', '') if lang=='ko' else '' }}</th><th class="right">{{ msg.amount }}</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+        <tr>
+          <td><a href="/orders/{{ order.order_no }}">{{ order.order_no }}</a></td>
+          <td>{{ order.created_at[:10] }}</td>
+          <td><span class="status status-{{ order.status|lower }}">{{ status_labels.get(order.status, order.status) }}</span></td>
+          <td class="right">{{ order.total_amount|won }}</td>
+          <td class="right"><a href="/orders/{{ order.order_no }}" class="btn small">{{ msg.detail }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+{% else %}
+  <p class="empty">{{ msg.no_orders }}</p>
+  <a href="/" class="btn">{{ msg.shop_again }}</a>
+{% endif %}
+{% endblock %}

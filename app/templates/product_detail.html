@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}{{ product.name }} · 다이소mall{% endblock %}
+{% block content %}
+<a href="/" class="back">{{ msg.back_to_list }}</a>
+
+<section class="detail">
+  <div class="detail-thumb">{{ product.emoji }}</div>
+  <div class="detail-body">
+    <span class="cat">{{ product.category }}</span>
+    <h1>{{ product.name }}</h1>
+    <p class="price big">{{ product.price|won }}</p>
+    <p class="desc">{{ product.description }}</p>
+    <p class="stock">
+      {% if product.stock > 0 %}{{ msg.stock }} {{ product.stock }}개{% else %}<span class="tag soldout">{{ msg.soldout }}</span>{% endif %}
+    </p>
+
+    {% if product.stock > 0 %}
+      <form method="post" action="/cart/items" class="buy">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <label for="quantity">{{ msg.quantity }}</label>
+        <input id="quantity" type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+        <button type="submit" class="btn primary">{{ msg.add_to_cart }}</button>
+      </form>
+    {% else %}
+      <p class="empty">{{ '현재 품절된 상품입니다.' if lang == 'ko' else 'This product is currently sold out.' }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

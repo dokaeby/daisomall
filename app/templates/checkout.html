@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.checkout_page }}{% endblock %}
+{% block content %}
+<h1>{{ msg.checkout_page }}</h1>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<div class="checkout">
+  <section class="panel">
+    <h2>{{ msg.shipping_info }}</h2>
+    <form method="post" action="/checkout" class="stack">
+      <label>{{ msg.receiver }}
+        <input type="text" name="receiver_name" value="{{ receiver_name or '' }}" required>
+      </label>
+      <label>{{ msg.contact }}
+        <input type="text" name="receiver_phone" value="{{ receiver_phone or '' }}" placeholder="010-1234-5678" required>
+      </label>
+      <label>{{ msg.address }}
+        <input type="text" name="address" value="{{ address or '' }}" required>
+      </label>
+      <fieldset class="pay">
+        <legend>{{ msg.payment_method }}</legend>
+        <label class="radio">
+          <input type="radio" name="payment_method" value="card"
+                 {% if payment_method != 'bank_transfer' %}checked{% endif %}> {{ msg.card }}
+        </label>
+        <label class="radio">
+          <input type="radio" name="payment_method" value="bank_transfer"
+                 {% if payment_method == 'bank_transfer' %}checked{% endif %}> {{ msg.bank_transfer }}
+        </label>
+      </fieldset>
+      <p class="muted">{{ msg.mock_payment_note }}</p>
+      <button type="submit" class="btn primary block">{{ msg.checkout_submit }}</button>
+    </form>
+  </section>
+
+  <aside class="panel">
+    <h2>{{ msg.order_summary }}</h2>
+    <ul class="summary-list">
+      {% for line in lines %}
+        <li>
+          <span>{{ line.product.emoji }} {{ line.product.name }} × {{ line.quantity }}</span>
+          <strong>{{ line.subtotal|won }}</strong>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="summary">
+      <span>{{ msg.total }}</span>
+      <strong>{{ total|won }}</strong>
+    </div>
+    <div class="actions">
+      <a href="/cart" class="btn">{{ msg.continue_shopping }}</a>
+    </div>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+# ── Virtual env & caches ─────────────────────────────
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.superpowers/
+
+# ── Database & runtime artifacts ───────────────────
+*.db
+*.db-shm
+*.db-wal
+shop.db*
+
+# ── Secrets: keys, tokens, passwords ───────────────
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jwk
+service-account-*.json
+supabase*
+
+# ── API / Auth tokens (examples) ───────────────────
+.github_token
+github_token
+token.txt
+api_key*.txt
+*.apikey
+
+# ── IDE & editor ───────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ── OS / editor junk ───────────────────────────────
+Thumbs.db
+Desktop.ini

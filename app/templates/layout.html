@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e8402a">
+  <title>{% block title %}{{ page_title }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}?v=3">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/"><span class="logo" aria-hidden="true">🛍️</span>{{ nav.brand }}</a>
+      <nav class="nav" aria-label="주 메뉴">
+        <a href="/">{{ nav.home }}</a>
+        <a href="/cart">{{ nav.cart }}{% if cart_count %}<span class="count">{{ cart_count }}</span>{% endif %}</a>
+        {% if user %}
+          <a href="/orders">{{ nav.orders }}</a>
+          <a href="/mypage">{{ nav.mypage }}</a>
+          {% if user.is_admin %}<a href="/admin/products">{{ nav.admin }}</a>{% endif %}
+          <form method="post" action="/logout" class="inline">
+            <button type="submit" class="linkish">{{ nav.logout }}</button>
+          </form>
+        {% else %}
+          <a href="/login">{{ nav.login }}</a>
+          <a href="/signup" class="pill">{{ nav.signup }}</a>
+        {% endif %}
+      </nav>
+      <a href="{{ lang_toggle_url }}" class="lang-switch" title="언어切换">{{ lang_toggle_label }}</a>
+    </div>
+  </header>
+
+  {% if flash %}
+    <div class="wrap"><div class="flash">{{ flash }}</div></div>
+  {% endif %}
+
+  <main class="wrap main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="wrap footer">
+    <span>{{ '로컬 데모 · 인증은 Supabase로 전환 예정' if lang == 'ko' else 'Local demo · Auth switching to Supabase' }}</span>
+  </footer>
+
+  <nav class="tabbar" aria-label="모바일 메뉴">
+    <a href="/" class="{% if request.url.path == '/' %}active{% endif %}">
+      <span class="tab-ico" aria-hidden="true">🏠</span>{{ nav.home_tab }}
+    </a>
+    <a href="/cart" class="{% if request.url.path == '/cart' %}active{% endif %}">
+      <span class="tab-ico" aria-hidden="true">🛒</span>{{ nav.cart }}
+      {% if cart_count %}<span class="count">{{ cart_count }}</span>{% endif %}
+    </a>
+    {% if user %}
+      <a href="/orders" class="{% if request.url.path.startswith('/orders') %}active{% endif %}">
+        <span class="tab-ico" aria-hidden="true">📦</span>{{ nav.orders }}
+      </a>
+      <a href="/mypage" class="{% if request.url.path == '/mypage' %}active{% endif %}">
+        <span class="tab-ico" aria-hidden="true">👤</span>{{ nav.mypage }}
+      </a>
+    {% else %}
+      <a href="/login" class="{% if request.url.path == '/login' %}active{% endif %}">
+        <span class="tab-ico" aria-hidden="true">🔑</span>{{ nav.login }}
+      </a>
+      <a href="/signup" class="{% if request.url.path == '/signup' %}active{% endif %}">
+        <span class="tab-ico" aria-hidden="true">✨</span>{{ nav.signup }}
+      </a>
+    {% endif %}
+  </nav>
+</body>
+</html>

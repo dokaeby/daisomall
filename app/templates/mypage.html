@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.my_page }}{% endblock %}
+{% block content %}
+<h1>{{ msg.my_page }}</h1>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<section class="panel">
+  <h2>{{ msg.member_info }}</h2>
+  <dl class="info">
+    <dt>{{ msg.email }}</dt><dd>{{ user.email }}</dd>
+    <dt>{{ msg.name }}</dt><dd>{{ user.name }}</dd>
+    <dt>{{ '휴대폰' if lang=='ko' else 'Phone' }}</dt><dd>{{ user.phone or '-' }}</dd>
+  </dl>
+  <div class="actions">
+    <a href="/orders" class="btn">{{ msg.view_orders }}</a>
+    <form method="post" action="/logout" class="inline-form">
+      <button type="submit" class="btn">{{ msg.logout_button }}</button>
+    </form>
+  </div>
+</section>
+
+{% if user.is_admin %}
+<section class="panel">
+  <h2>{{ msg.admin_section }}</h2>
+  <div class="actions">
+    <a href="/admin/products" class="btn">{{ msg.product_management }}</a>
+    <a href="/admin/orders" class="btn">{{ msg.order_management }}</a>
+  </div>
+</section>
+{% endif %}
+
+<section class="panel danger-zone">
+  <h2>{{ msg.withdrawal_section }}</h2>
+  <p class="muted">{{ msg.withdrawal_note }}</p>
+  <form method="post" action="/mypage/delete" class="inline-form">
+    <input type="password" name="password" placeholder="{{ msg.confirm_password_placeholder }}" required>
+    <button type="submit" class="btn danger">{{ msg.withdraw_button }}</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,6 @@
+{# Order status badge – use via: {% from "_macros.html" import status_badge with context %} #}
+
+{% macro status_badge(status, labels=none) %}
+  {% set label = (labels or status_labels).get(status, status) %}
+  <span class="status status-{{ status|lower }}">{{ label }}</span>
+{% endmacro %}

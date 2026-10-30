@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}{{ msg.admin_products_page }}{% endblock %}
+{% block content %}
+<h1>{{ msg.admin_products_title }}</h1>
+<p class="muted"><a href="/admin/orders">{{ msg.go_order_mgmt }}</a></p>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<section class="panel">
+  <h2>{{ msg.product_registration }}</h2>
+  <form method="post" action="/admin/products" class="grid-form">
+    <label>{{ msg.product_name }} <input type="text" name="name" required></label>
+    <label>{{ msg.category }} <input type="text" name="category" required></label>
+    <label>{{ msg.price_label }} <input type="number" name="price" min="0" value="1000" required></label>
+    <label>{{ msg.stock_label }} <input type="number" name="stock" min="0" value="10" required></label>
+    <label>{{ '이모지' if lang=='ko' else 'Emoji' }} <input type="text" name="emoji" value="📦" maxlength="8"></label>
+    <label class="wide">{{ msg.description_label }} <input type="text" name="description"></label>
+    <button type="submit" class="btn primary">{{ msg.registered }}</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>{% if lang == 'ko' %}등록된 상품 (판매중 {{ products|length }}종){% else %}Registered ({{ products|length }} on sale){% endif %}</h2>
+  <div class="table-wrap">
+  <table class="table">
+
+    <thead>
+      <tr><th>{{ msg.product_id }}</th><th>{{ msg.product }}</th><th>{{ msg.category }}</th><th class="right">{{ msg.price_label }}</th><th class="right">{{ msg.stock_label }}</th></tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr>
+          <td>{{ product.id }}</td>
+          <td>{{ product.emoji }} {{ product.name }}</td>
+          <td>{{ product.category }}</td>
+          <td class="right">{{ product.price|won }}</td>
+          <td class="right">{{ product.stock }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>
+{% endblock %}
